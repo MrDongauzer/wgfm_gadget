@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<stations>
+  <station id="WargamingFM" name="WG.FM">http://81.25.32.234:8050/wgfm</station>
+  <station id="directfire.ru" name="directfire">http://live.directfire.ru:8000/autorj</station>
+</stations>

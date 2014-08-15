@@ -1,0 +1,155 @@
+.gadget
+{
+	width: 145px;
+    height: 80px;
+    margin: 0px;
+    padding: 0px;
+}
+.frontend
+{
+	position: absolute;
+	left: 25px;
+	width: 110px;
+	top: 15px;
+	height: 57px;
+}
+.play
+{
+	position: absolute;
+	top: 0px;
+	left: -10px;
+}
+.pause
+{
+	position: absolute;
+	top: 0px;
+	left: -10px;
+}
+.station
+{
+	font-family: Calibri, Tahoma;
+	font-size: 12px;
+	color: #ffffff;
+	font-weight: bold;
+	position: absolute;
+	top: 0px;
+	left: 22px;
+}
+.change
+{
+	position: absolute;
+	top: 0px;
+	left: 20px;
+}
+.status
+{
+	font-family: Calibri, Tahoma;
+	font-size: 11px;
+	color: #666d84;
+	font-style: italic;
+	position: absolute;
+	top: 14px;
+	left: 23px;
+}
+.speaker
+{
+	position: absolute;
+	top: 0px;
+	left: 5px;
+}
+.voldown
+{
+	position: absolute;
+	top: 36px;
+	left: -12px;
+}
+.vol1
+{
+	position: absolute;
+	top: 35px;
+	left: 0px; 
+}
+.vol2
+{
+	position: absolute;
+	top: 35px;
+	left: 7px;
+}
+.vol3
+{
+	position: absolute;
+	top: 35px;
+	left: 14px;
+}
+.vol4
+{
+	position: absolute;
+	top: 35px;
+	left: 21px;
+}
+.vol5
+{
+	position: absolute;
+	top: 35px;
+	left: 28px;
+}
+.vol6
+{
+	position: absolute;
+	top: 35px;
+	left: 35px;
+}
+.vol7
+{
+	position: absolute;
+	top: 35px;
+	left: 42px;
+}
+.vol8
+{
+	position: absolute;
+	top: 35px;
+	left: 49px;
+}
+.vol9
+{
+	position: absolute;
+	top: 35px;
+	left: 56px;
+}
+.vol10
+{
+	position: absolute;
+	top: 35px;
+	left: 63px;
+}
+.volup
+{
+	position: absolute;
+	top: 36px;
+	left: 70px;
+}
+.backend
+{
+	position: absolute;
+	left: 10px;
+	width: 115px;
+	top: 10px;
+	height: 47px;
+}
+.stations
+{
+	font-family: Calibri, Tahoma;
+	font-size: 11px;
+	color: #000000;
+	width: 113px;
+	height: 47px;
+}
+.settings
+{
+	font-family: Tahoma;
+	font-size: 10pt;
+	color: #000000;
+	width: 264px;
+	height: 190px;
+}

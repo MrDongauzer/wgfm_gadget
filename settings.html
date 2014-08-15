@@ -1,0 +1,35 @@
+<html xmlns="http://uwarrior.net" >
+    <head>
+        <title>WargamingFM Radio</title>
+        <link type="text/css" rel="stylesheet" href="css/gadget.css" />
+        <script language="javascript" type="text/javascript">
+        
+       function Initialise() {
+            System.Gadget.onSettingsClosing = SettingsClosing;
+            if (System.Gadget.Settings.read('AutoPlay') != '') {
+                autoplay.checked = System.Gadget.Settings.read('AutoPlay');
+            }
+        }
+
+	    function SettingsClosing(event)
+	    {
+ 		    if (event.closeAction == event.Action.commit) {
+	            System.Gadget.Settings.write('AutoPlay', autoplay.checked);
+		    }
+		    event.cancel = false;
+	    }
+
+        </script>
+    </head>
+    <body onload="Initialise();" class="settings">
+        <input id="autoplay" type="checkbox" /><label for="autoplay">Play at startup</label>
+    	<p><span style="font-family: Tahoma; font-size: 10pt;">WargamingFM слушаем и улыбаемся, и не забываем зайти на сайт разработчика!</span></p>
+	
+<div align="center"> 
+<a href="http://81.25.32.234:8050/wgfm"> <img src="images/wg.png" alt="Ссылка на радио WargamingFM" width="48" height="48" border="0"></a>&nbsp;&nbsp;
+<a href="http://uwarrior.net/angar/user/San4os4"> <img src="images/uwr.png" alt="ссылка на мою страничку" width="48" height="48" border="0"></a>&nbsp;&nbsp;
+<a href="https://vk.com/uwarriornet"> <img src="images/vk.png" alt="Ссылка на мой VK" width="48" height="48" border="0"></a>
+<a href="https://vk.com/wargamingfm"> <img src="images/wg.png" alt="Ссылка на группу в ВК посвященную радио WargamingFM" width="48" height="48" border="0"></a>&nbsp;&nbsp;
+	</div>  
+</body>
+</html>

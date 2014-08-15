@@ -1,0 +1,246 @@
+<html xmlns="http://www.w3.org/1999/xhtml" >
+    <head>
+        <title>PerfectRadio</title>
+        <link type="text/css" rel="stylesheet" href="css/gadget.css" />
+	    <script language="javascript" type="text/javascript" for="mediaplayer" event="playstatechange(newstate)">
+            PlayStateChange(newstate);
+        </script>
+        <script language="javascript" type="text/javascript">
+        
+            var togglevolume
+
+            function Initialise() {
+                var xmldoc
+                var xmlnodes
+                var stationoption
+                var initvolume
+                var remaindervolume
+                System.Gadget.settingsUI = "settings.html";
+                xmldoc = new ActiveXObject('Msxml2.FreeThreadedDOMDocument.6.0');
+                xmldoc.async = false;
+                xmldoc.load('stations.xml');
+                xmlnodes = xmldoc.documentElement.selectNodes("station");
+                for (var i = 0; i < xmlnodes.length; i++){
+	                stationoption = new Option(xmlnodes(i).selectSingleNode('@name').text, xmlnodes(i).text);
+                    stationoption.id = xmlnodes(i).selectSingleNode('@id').text;
+	                stations.options[i] = stationoption;
+                }
+                initvolume = System.Gadget.Settings.read('Volume');
+                if (initvolume == '') {
+                    initvolume = mediaplayer.settings.volume;
+                    remaindervolume = initvolume % 10;
+                    initvolume = (initvolume - remaindervolume) / 10;
+                }
+                SetVolume(initvolume);
+                LoadStation();
+                PlayStateChange(10);
+                if (System.Gadget.Settings.read('AutoPlay')) {
+                    PlayMedia(true);
+                }
+            }
+
+            function PlayMedia(startplay) {
+                if (startplay) {
+                    mediaplayer.controls.play();
+                    PlayEnabled(false);
+                }
+                else {
+                    mediaplayer.controls.stop();
+                    PlayEnabled(true);
+                }
+            }
+
+            function PlayEnabled(playable) {
+                if (playable) {
+                    document.getElementById('play').style.display = '';
+                    document.getElementById('pause').style.display = 'none';
+                }
+                else {
+                    document.getElementById('play').style.display = 'none';
+                    document.getElementById('pause').style.display = '';
+                }
+            }
+
+            function PlayStateChange(newstate) {
+        	    switch (newstate){ 
+	                //case 0: //Undefined - Windows Media Player is in an undefined state.
+		            //    break;
+	                case 1: //Stopped - Playback of the current media item is stopped.
+                        PlayEnabled(true);
+                        document.getElementById('status').innerText = "stopped";
+		                break;
+	                case 2: //Paused - Playback of the current media item is paused. When a media item is paused, resuming playback begins from the same location. 
+                        PlayEnabled(true);
+                        document.getElementById('status').innerText = "paused";
+		                break;
+	                case 3: //Playing - The current media item is playing. 
+                        PlayEnabled(false);
+                        document.getElementById('status').innerText = "playing...";
+		                break;
+	                //case 4: //ScanForward - The current media item is fast forwarding. 
+		            //    break;
+	                //case 5: //ScanReverse - The current media item is fast rewinding. 
+		            //    break;
+	                case 6: //Buffering - The current media item is getting additional data from the server. 
+                        PlayEnabled(false);
+                        document.getElementById('status').innerText = "buffering...";
+		                break;
+	                case 7: //Waiting - Connection is established, but the server is not sending data. Waiting for session to begin. 
+                        PlayEnabled(false);
+                        document.getElementById('status').innerText = "waiting...";
+		                break;
+	                case 8: //MediaEnded - Media item has completed playback.  
+                        PlayEnabled(true);
+                        document.getElementById('status').innerText = "ended";
+		                break;
+	                case 9: //Transitioning - Preparing new media item. 
+                        PlayEnabled(false);
+                        document.getElementById('status').innerText = "transitioning...";
+		                break;
+	                case 10: //Ready - Ready to begin playing. 
+                        PlayEnabled(true);
+                        document.getElementById('status').innerText = "ready";
+		                break;
+	                case 11: //Reconnecting - Reconnecting to stream. 
+                        PlayEnabled(false);
+                        document.getElementById('status').innerText = "reconnecting";
+		                break;
+                }
+            }
+     
+            function SetVolume(volume) {
+                for (var i = 1; i <= 10; i++)
+                {
+                    document.getElementById('vol' + i).setAttribute('src', 'images/voloff.png');
+                }
+                for (var i = 1; i <= volume; i++)
+                {
+                    document.getElementById('vol' + i).setAttribute('src', 'images/volon.png');
+                }
+                currentvolume = volume;
+                System.Gadget.Settings.write('Volume', currentvolume);
+                mediaplayer.settings.volume = currentvolume * 10;
+            }
+
+            function ToggleVolume() {
+                var currentvolume;
+                currentvolume = System.Gadget.Settings.read('Volume');
+                if (currentvolume != 0) {
+                    togglevolume = currentvolume;
+                    SetVolume(0);
+                }
+                else {
+                    SetVolume(togglevolume);
+                    togglevolume = -1;
+                }
+            }
+
+            function AdjVolumeDown() {
+                var currentvolume;
+                currentvolume = System.Gadget.Settings.read('Volume');
+                if (currentvolume > 0) {
+                    SetVolume(currentvolume - 1);
+                }
+            }
+
+            function AdjVolumeUp() {
+                var currentvolume;
+                currentvolume = System.Gadget.Settings.read('Volume');
+                if (currentvolume < 10) {
+                    SetVolume(currentvolume + 1);
+                }
+            }
+
+            function ShowChangeStation() {
+                var stationid;
+                document.getElementById('frontend').style.display = 'none';
+                document.getElementById('station').innerText = '';
+                document.getElementById('status').innerText = '';
+                stationid = System.Gadget.Settings.read('Station');
+                document.getElementById(stationid).selected = true;
+                document.getElementById('backend').style.display = '';
+            }
+
+            function ChangeStation() {
+                SaveStation();
+                LoadStation();
+                document.getElementById('backend').style.display = 'none';
+                document.getElementById('frontend').style.display = '';
+                PlayMedia(true);
+            }
+
+            function SaveStation() {
+                var stationindex;
+                var stationid;
+                stationindex = document.getElementById('stations').options.selectedIndex;
+                stationid = document.getElementById('stations').options[stationindex].id;
+                System.Gadget.Settings.write('Station', stationid);
+            }
+
+            function LoadStation() {
+                var initstation;
+                var stationid;
+                initstation = false;
+                stationid = System.Gadget.Settings.read('Station');
+                if (stationid == '') {
+                    initstation = true;
+                }
+                else if (! document.getElementById(stationid)) {
+                    initstation = true;
+                }
+                if (initstation) {
+                    stationid = document.getElementById('stations').options[0].id;
+                    System.Gadget.Settings.write('Station', stationid);
+                    System.Gadget.Settings.write('AutoPlay', 'True');
+                }
+                document.getElementById('station').innerText = document.getElementById(stationid).text;
+                mediaplayer.URL = document.getElementById(stationid).value;
+            }
+
+        </script>
+    </head>
+    <body onload="Initialise();" class="gadget">
+
+        <g:background src="images/back.png" style="position: absolute; z-index: -1;" />
+
+        <div id="frontend" class="frontend">
+
+            <img id="play" class="play" alt="" src="images/play.png" onclick="PlayMedia(true);" />
+            <img id="pause" class="pause" alt="" src="images/pause.png" onclick="PlayMedia(false);" style="display: none;" />
+            <div id="station" class="station"></div>
+            <img id="change" class="change" alt="" src="images/change.png" onclick="ShowChangeStation();"/>
+
+            <div id="status" class="status"></div>
+
+            <img id="speaker" class="speaker" alt="" src="images/speaker.png" onclick="ToggleVolume();" />
+            <img id="voldown" class="voldown" alt="" src="images/voldown.png" onclick="AdjVolumeDown();" />
+            <img id="vol1" class="vol1" alt="" src="images/voloff.png" onclick="SetVolume(1);" />
+            <img id="vol2" class="vol2" alt="" src="images/voloff.png" onclick="SetVolume(2);" />
+            <img id="vol3" class="vol3" alt="" src="images/voloff.png" onclick="SetVolume(3);" />
+            <img id="vol4" class="vol4" alt="" src="images/voloff.png" onclick="SetVolume(4);" />
+            <img id="vol5" class="vol5" alt="" src="images/voloff.png" onclick="SetVolume(5);" />
+            <img id="vol6" class="vol6" alt="" src="images/voloff.png" onclick="SetVolume(6);" />
+            <img id="vol7" class="vol7" alt="" src="images/voloff.png" onclick="SetVolume(7);" />
+            <img id="vol8" class="vol8" alt="" src="images/voloff.png" onclick="SetVolume(8);" />
+            <img id="vol9" class="vol9" alt="" src="images/voloff.png" onclick="SetVolume(9);" />
+            <img id="vol10" class="vol10" alt="" src="images/voloff.png" onclick="SetVolume(10);" />
+            <img id="volup" class="volup" alt="" src="images/volup.png" onclick="AdjVolumeUp();" />
+            
+            <object id="mediaplayer" classid="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6" codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701" type="application/x-oleobject" style="display: none;">
+                <param name="AutoStart" value="false" />
+			    <param name="uiMode" value="invisible" />
+                <param name="SendPlayStateChangeEvents" value="true" />
+                <param name="URL" value="" />
+            </object>
+
+        </div>
+
+        <div id="backend" class="backend" style="display: none;">
+
+            <select id="stations" class="stations" size="2" ondblclick="ChangeStation();">
+            </select>
+
+        </div>
+
+    </body>
+</html>

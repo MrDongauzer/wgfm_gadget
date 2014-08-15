@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gadget>
+  <name>WG.fm</name>
+  <namespace>WG.fm Radio</namespace>
+  <version>1.6</version>
+  <author name="San4os4">
+    <info url="http://uwarrior.net/" text="uwarrior.net"/>
+    <logo src="images/icon.png"/>
+  </author>
+  <copyright>&#169; uWarrior 2014</copyright>
+  <description>WargamingFM!</description>
+  <icons>
+    <icon height="67" width="130" src="images/icon.png"/>
+  </icons>
+  <hosts>
+    <host name="sidebar">
+      <base type="html" apiVersion="1.0.0" src="gadget.html"/>
+      <permissions>Full</permissions>
+      <platform minPlatformVersion="1.0"/>
+      <defaultImage src="images/back.png"/>
+    </host>
+  </hosts>
+</gadget>
